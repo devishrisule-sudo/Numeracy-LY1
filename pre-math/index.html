@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -95,7 +96,7 @@ button{
     color:#333;
 }
 
-/* Image */
+/* Image Area */
 
 #imageArea{
     width:100%;
@@ -115,6 +116,7 @@ button{
     width:100%;
     height:100%;
     object-fit:contain;
+    display:block;
 }
 
 /* Click Areas */
@@ -145,7 +147,7 @@ button{
     }
 }
 
-/* Glow Hint */
+/* Glow */
 
 .glow{
     animation:glow 1s infinite;
@@ -327,7 +329,6 @@ button{
 let currentQuestion = 0;
 let score = 0;
 let muted = false;
-let wrongAttempts = 0;
 
 /* Questions */
 
@@ -335,17 +336,17 @@ const questions = [
 
 {
 question:"Tap the object UP in the sky",
-background:"media/aeroplane and car.png",
+background:"media/aeroplane-car.png",
 options:[
 {
-left:"14%",
-top:"8%",
-width:"55%",
+left:"16%",
+top:"5%",
+width:"58%",
 height:"30%",
 correct:true
 },
 {
-left:"25%",
+left:"24%",
 top:"62%",
 width:"45%",
 height:"22%",
@@ -359,17 +360,17 @@ question:"Tap the bird DOWN on the ground",
 background:"media/birds.png",
 options:[
 {
-left:"10%",
-top:"10%",
+left:"8%",
+top:"8%",
 width:"28%",
 height:"28%",
 correct:false
 },
 {
 left:"45%",
-top:"62%",
-width:"22%",
-height:"22%",
+top:"65%",
+width:"18%",
+height:"18%",
 correct:true
 }
 ]
@@ -380,17 +381,17 @@ question:"Tap the animal UP on the roof",
 background:"media/catdog.png",
 options:[
 {
-left:"62%",
-top:"8%",
-width:"15%",
+left:"60%",
+top:"6%",
+width:"18%",
 height:"18%",
 correct:true
 },
 {
 left:"8%",
-top:"65%",
+top:"66%",
 width:"18%",
-height:"20%",
+height:"18%",
 correct:false
 }
 ]
@@ -401,10 +402,10 @@ question:"Tap the girl coming DOWN",
 background:"media/lift.png",
 options:[
 {
-left:"12%",
-top:"18%",
-width:"22%",
-height:"32%",
+left:"10%",
+top:"12%",
+width:"24%",
+height:"34%",
 correct:false
 },
 {
@@ -422,15 +423,15 @@ question:"Tap the lift going UP",
 background:"media/elevator.png",
 options:[
 {
-left:"14%",
-top:"18%",
+left:"12%",
+top:"45%",
 width:"26%",
 height:"40%",
 correct:false
 },
 {
-left:"52%",
-top:"4%",
+left:"54%",
+top:"2%",
 width:"26%",
 height:"40%",
 correct:true
@@ -450,7 +451,7 @@ height:"30%",
 correct:true
 },
 {
-left:"10%",
+left:"8%",
 top:"10%",
 width:"24%",
 height:"30%",
@@ -464,16 +465,16 @@ question:"Tap the boy sliding DOWN",
 background:"media/slide.png",
 options:[
 {
-left:"5%",
+left:"4%",
 top:"48%",
-width:"32%",
-height:"32%",
+width:"34%",
+height:"34%",
 correct:true
 },
 {
 left:"62%",
-top:"10%",
-width:"22%",
+top:"8%",
+width:"24%",
 height:"34%",
 correct:false
 }
@@ -485,15 +486,15 @@ question:"Tap the side that is DOWN",
 background:"media/weightingscale.png",
 options:[
 {
-left:"12%",
-top:"52%",
-width:"24%",
-height:"28%",
+left:"8%",
+top:"48%",
+width:"28%",
+height:"30%",
 correct:true
 },
 {
 left:"66%",
-top:"20%",
+top:"18%",
 width:"18%",
 height:"22%",
 correct:false
@@ -524,15 +525,13 @@ function loadQuestion(){
         return;
     }
 
-    wrongAttempts = 0;
-
     const q = questions[currentQuestion];
 
     document.getElementById("questionText").innerText = q.question;
 
     const scene = document.getElementById("scene");
 
-    scene.innerHTML = `<img src="${q.background}">`;
+    scene.innerHTML = `<img src="${q.background}" draggable="false">`;
 
     q.options.forEach((opt)=>{
 
@@ -563,13 +562,13 @@ function checkAnswer(element,correct){
 
     const options = document.querySelectorAll(".option");
 
-    options.forEach(o=>{
-
-        o.style.pointerEvents = "none";
-
-    });
-
     if(correct){
+
+        options.forEach(o=>{
+
+            o.style.pointerEvents = "none";
+
+        });
 
         element.classList.add("correctCircle");
 
@@ -599,17 +598,17 @@ function checkAnswer(element,correct){
 
     }else{
 
-        wrongAttempts++;
-
         playSound("wrongSound");
+
+        element.classList.add("glow");
 
         showFeedback("Try Again!","red");
 
-        options.forEach(o=>{
+        setTimeout(()=>{
 
-            o.style.pointerEvents = "auto";
+            element.classList.remove("glow");
 
-        });
+        },1000);
 
     }
 
@@ -690,7 +689,7 @@ function toggleMute(){
 
 }
 
-/* End Screen */
+/* End Game */
 
 function endGame(){
 
@@ -724,3 +723,4 @@ function restartGame(){
 
 </body>
 </html>
+```
