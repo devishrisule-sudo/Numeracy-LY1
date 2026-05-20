@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,7 +16,7 @@
 }
 
 body{
-    font-family:Arial, sans-serif;
+    font-family:Arial,sans-serif;
     background:#f5f5f5;
     overflow:hidden;
 }
@@ -29,7 +30,7 @@ body{
     overflow:hidden;
 }
 
-/* Splash Screen */
+/* Splash */
 
 #splash{
     position:absolute;
@@ -81,6 +82,8 @@ button{
     margin-left:5px;
 }
 
+/* Question */
+
 #questionArea{
     padding:15px;
     text-align:center;
@@ -89,11 +92,14 @@ button{
 #questionText{
     font-size:32px;
     margin-bottom:10px;
+    color:#333;
 }
+
+/* Image */
 
 #imageArea{
     width:100%;
-    height:68vh;
+    height:70vh;
     display:flex;
     justify-content:center;
     align-items:center;
@@ -111,24 +117,32 @@ button{
     object-fit:contain;
 }
 
+/* Click Areas */
+
 .option{
     position:absolute;
     cursor:pointer;
     background:transparent;
+    border-radius:50%;
 }
 
 /* Green Circle */
 
-.correctCircle::after{
-    content:"";
-    position:absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    border:6px solid #00b300;
+.correctCircle{
+    border:8px solid #00c853;
     border-radius:50%;
-    pointer-events:none;
+    animation:pop .4s ease;
+}
+
+@keyframes pop{
+
+    0%{
+        transform:scale(0.5);
+    }
+
+    100%{
+        transform:scale(1);
+    }
 }
 
 /* Glow Hint */
@@ -156,10 +170,10 @@ button{
 
 #feedback{
     position:absolute;
-    top:50%;
+    top:45%;
     left:50%;
     transform:translate(-50%,-50%);
-    font-size:48px;
+    font-size:50px;
     font-weight:bold;
     z-index:100;
     display:none;
@@ -231,20 +245,13 @@ button{
     }
 
     #imageArea{
-        height:60vh;
+        height:62vh;
     }
 
-    #endScreen h1{
-        font-size:34px;
+    .correctCircle{
+        border:5px solid #00c853;
     }
 
-    #endScreen p{
-        font-size:22px;
-    }
-
-    .logoOnly{
-        width:180px;
-    }
 }
 
 </style>
@@ -257,7 +264,7 @@ button{
     <!-- Splash -->
 
     <div id="splash">
-        <img src="assets/innovinelogo.png" alt="logo" class="logoOnly">
+        <img src="media/innovinelogo.png" class="logoOnly">
     </div>
 
     <!-- Top Bar -->
@@ -283,7 +290,7 @@ button{
         <div id="questionText"></div>
     </div>
 
-    <!-- Images -->
+    <!-- Image Area -->
 
     <div id="imageArea">
         <div class="scene" id="scene"></div>
@@ -299,7 +306,7 @@ button{
 
         <h1>Great Job!</h1>
 
-        <p>You have done a great job!</p>
+        <p>You did amazing!</p>
 
         <p>Your Score: <span id="finalScore"></span>/8</p>
 
@@ -311,90 +318,186 @@ button{
 
 <!-- Sounds -->
 
-<audio id="correctSound" src="assets/correct.mp3"></audio>
-<audio id="wrongSound" src="assets/wrong.mp3"></audio>
-<audio id="clapSound" src="assets/claps.mp3"></audio>
+<audio id="correctSound" src="media/correct.mp3"></audio>
+<audio id="wrongSound" src="media/wrong.mp3"></audio>
+<audio id="clapSound" src="media/claps.mp3"></audio>
 
 <script>
 
 let currentQuestion = 0;
 let score = 0;
-let wrongAttempts = 0;
 let muted = false;
+let wrongAttempts = 0;
 
 /* Questions */
 
 const questions = [
 
 {
-question:"Circle the aeroplane",
-background:"assets/aeroplane and car.png",
+question:"Tap the object UP in the sky",
+background:"media/aeroplane and car.png",
 options:[
-{left:"18%", top:"10%", width:"14%", height:"14%", correct:true},
-{left:"60%", top:"62%", width:"14%", height:"14%", correct:false}
+{
+left:"14%",
+top:"8%",
+width:"55%",
+height:"30%",
+correct:true
+},
+{
+left:"25%",
+top:"62%",
+width:"45%",
+height:"22%",
+correct:false
+}
 ]
 },
 
 {
-question:"Circle the bird on the ground",
-background:"assets/birds.png",
+question:"Tap the bird DOWN on the ground",
+background:"media/birds.png",
 options:[
-{left:"26%", top:"20%", width:"12%", height:"12%", correct:false},
-{left:"52%", top:"74%", width:"12%", height:"12%", correct:true}
+{
+left:"10%",
+top:"10%",
+width:"28%",
+height:"28%",
+correct:false
+},
+{
+left:"45%",
+top:"62%",
+width:"22%",
+height:"22%",
+correct:true
+}
 ]
 },
 
 {
-question:"Circle the cat on the roof",
-background:"assets/catdog.png",
+question:"Tap the animal UP on the roof",
+background:"media/catdog.png",
 options:[
-{left:"25%", top:"18%", width:"14%", height:"14%", correct:true},
-{left:"58%", top:"70%", width:"14%", height:"14%", correct:false}
+{
+left:"62%",
+top:"8%",
+width:"15%",
+height:"18%",
+correct:true
+},
+{
+left:"8%",
+top:"65%",
+width:"18%",
+height:"20%",
+correct:false
+}
 ]
 },
 
 {
-question:"Circle the girl who is coming down",
-background:"assets/lift.png",
+question:"Tap the girl coming DOWN",
+background:"media/lift.png",
 options:[
-{left:"25%", top:"20%", width:"14%", height:"14%", correct:false},
-{left:"58%", top:"48%", width:"14%", height:"14%", correct:true}
+{
+left:"12%",
+top:"18%",
+width:"22%",
+height:"32%",
+correct:false
+},
+{
+left:"56%",
+top:"38%",
+width:"24%",
+height:"34%",
+correct:true
+}
 ]
 },
 
 {
-question:"Circle the lift going up",
-background:"assets/elevator.png",
+question:"Tap the lift going UP",
+background:"media/elevator.png",
 options:[
-{left:"22%", top:"55%", width:"15%", height:"15%", correct:false},
-{left:"58%", top:"18%", width:"15%", height:"15%", correct:true}
+{
+left:"14%",
+top:"18%",
+width:"26%",
+height:"40%",
+correct:false
+},
+{
+left:"52%",
+top:"4%",
+width:"26%",
+height:"40%",
+correct:true
+}
 ]
 },
 
 {
-question:"Circle the child who is down",
-background:"assets/seasaw.png",
+question:"Tap the child DOWN",
+background:"media/seasaw.png",
 options:[
-{left:"22%", top:"62%", width:"14%", height:"14%", correct:true},
-{left:"60%", top:"22%", width:"14%", height:"14%", correct:false}
+{
+left:"56%",
+top:"44%",
+width:"24%",
+height:"30%",
+correct:true
+},
+{
+left:"10%",
+top:"10%",
+width:"24%",
+height:"30%",
+correct:false
+}
 ]
 },
 
 {
-question:"Circle the boy who is climbing the slide",
-background:"assets/slide.png",
+question:"Tap the boy sliding DOWN",
+background:"media/slide.png",
 options:[
-{left:"22%", top:"22%", width:"14%", height:"14%", correct:true},
-{left:"60%", top:"56%", width:"14%", height:"14%", correct:false}
+{
+left:"5%",
+top:"48%",
+width:"32%",
+height:"32%",
+correct:true
+},
+{
+left:"62%",
+top:"10%",
+width:"22%",
+height:"34%",
+correct:false
+}
 ]
 },
 
 {
-question:"Circle the downside of the weighting scale",
-background:"assets/weightingscale.png",
+question:"Tap the side that is DOWN",
+background:"media/weightingscale.png",
 options:[
-{left:"22%", top:"60%", width:"15%", height:"15%", correct:true},
-{left:"60%", top:"24%", width:"15%", height:"15%", correct:false}
+{
+left:"12%",
+top:"52%",
+width:"24%",
+height:"28%",
+correct:true
+},
+{
+left:"66%",
+top:"20%",
+width:"18%",
+height:"22%",
+correct:false
+}
 ]
 }
 
@@ -404,11 +507,11 @@ options:[
 
 setTimeout(()=>{
 
-    document.getElementById("splash").style.display="none";
+    document.getElementById("splash").style.display = "none";
 
     loadQuestion();
 
-},5000);
+},3000);
 
 /* Load Question */
 
@@ -429,11 +532,9 @@ function loadQuestion(){
 
     const scene = document.getElementById("scene");
 
-    scene.innerHTML = `
-        <img src="${q.background}">
-    `;
+    scene.innerHTML = `<img src="${q.background}">`;
 
-    q.options.forEach((opt,index)=>{
+    q.options.forEach((opt)=>{
 
         const div = document.createElement("div");
 
@@ -444,9 +545,7 @@ function loadQuestion(){
         div.style.width = opt.width;
         div.style.height = opt.height;
 
-        div.onclick = (e)=>{
-
-            e.stopPropagation();
+        div.onclick = ()=>{
 
             checkAnswer(div,opt.correct);
 
@@ -464,7 +563,11 @@ function checkAnswer(element,correct){
 
     const options = document.querySelectorAll(".option");
 
-    options.forEach(o=>o.style.pointerEvents="none");
+    options.forEach(o=>{
+
+        o.style.pointerEvents = "none";
+
+    });
 
     if(correct){
 
@@ -476,7 +579,13 @@ function checkAnswer(element,correct){
 
         playSound("correctSound");
 
-        showFeedback("Correct!","green");
+        setTimeout(()=>{
+
+            playSound("clapSound");
+
+        },300);
+
+        showFeedback("Great Job!","#00c853");
 
         createConfetti();
 
@@ -486,7 +595,7 @@ function checkAnswer(element,correct){
 
             loadQuestion();
 
-        },1500);
+        },1800);
 
     }else{
 
@@ -494,45 +603,16 @@ function checkAnswer(element,correct){
 
         playSound("wrongSound");
 
-        if(wrongAttempts === 1){
+        showFeedback("Try Again!","red");
 
-            showFeedback("Try Again!","red");
+        options.forEach(o=>{
 
-            const correctOption = [...options].find((o,i)=>
-                questions[currentQuestion].options[i].correct
-            );
+            o.style.pointerEvents = "auto";
 
-            correctOption.classList.add("glow");
+        });
 
-            setTimeout(()=>{
-
-                options.forEach(o=>{
-
-                    o.style.pointerEvents="auto";
-
-                });
-
-            },1200);
-
-        }else{
-
-            const correctOption = [...options].find((o,i)=>
-                questions[currentQuestion].options[i].correct
-            );
-
-            correctOption.classList.add("correctCircle");
-
-            showFeedback("Correct Answer","green");
-
-            setTimeout(()=>{
-
-                currentQuestion++;
-
-                loadQuestion();
-
-            },1500);
-        }
     }
+
 }
 
 /* Feedback */
@@ -552,6 +632,7 @@ function showFeedback(text,color){
         feedback.style.display = "none";
 
     },1000);
+
 }
 
 /* Confetti */
@@ -579,7 +660,9 @@ function createConfetti(){
             conf.remove();
 
         },3000);
+
     }
+
 }
 
 /* Sound */
@@ -593,6 +676,7 @@ function playSound(id){
     sound.currentTime = 0;
 
     sound.play();
+
 }
 
 /* Mute */
@@ -603,19 +687,21 @@ function toggleMute(){
 
     document.getElementById("muteBtn").innerText =
     muted ? "Unmute" : "Mute";
+
 }
 
-/* End Game */
+/* End Screen */
 
 function endGame(){
 
-    document.getElementById("endScreen").style.display="flex";
+    document.getElementById("endScreen").style.display = "flex";
 
     document.getElementById("finalScore").innerText = score;
 
     playSound("clapSound");
 
     createConfetti();
+
 }
 
 /* Restart */
@@ -628,9 +714,10 @@ function restartGame(){
 
     document.getElementById("score").innerText = "0";
 
-    document.getElementById("endScreen").style.display="none";
+    document.getElementById("endScreen").style.display = "none";
 
     loadQuestion();
+
 }
 
 </script>
